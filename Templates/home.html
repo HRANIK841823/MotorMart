@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block content %}
+{% if messages %}
+    <div class="mt-4">
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show shadow-lg rounded" role="alert">
+                <strong>{{ message.tags|title }}:</strong> {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+<div class="d-flex flex-wrap align-items-center justify-content-between bg-light p-5 rounded shadow ">
+  <div class="col-md-6 mb-4 mb-md-0">
+     <h1 class="display-5 fw-bold text-primary">Welcome to MotorMart – Your Trusted Car Marketplace</h1>
+     <p class="lead text-muted">
+        At MotorMart, we bring together a wide selection of cars from trusted brands, offering you a seamless and personalized car-buying experience. Whether you're searching for your dream car or looking to explore different models, our platform provides detailed listings with images, prices, and specifications to help you make the best choice. Filter by brand, compare options, and enjoy the convenience of secure transactions with our user-friendly interface. MotorMart is your go-to destination for quality vehicles and exceptional service.
+     </p>
+     
+  </div>
+  <div class="col-md-6">
+     <img src="{% static 'header.png' %}" alt="MotorMart Header Image" class="img-fluid rounded">
+  </div>
+</div>
+ 
+<div class="mt-4 bg-white d-flex flex-wrap justify-content-center p-4 rounded shadow-lg">
+  {% for brand in brands %}
+      <a href="{% url 'brand_wise_car' brand.slug %}" 
+         class="btn btn-outline-primary col-md-3 col-sm-4 col-6 mx-2 mb-3 text-uppercase fw-bold py-3"
+         style="letter-spacing: 1.5px; font-size: 1.1rem; border-width: 2px; transition: all 0.3s ease-in-out;">
+         {{ brand.name }}
+      </a>
+  {% endfor %}
+</div>
+
+
+
+
+
+<div class="container mt-4">
+  <h2 class="text-center mb-4" style="font-family: 'Arial Black', sans-serif; color: #333;">Our Car Collection</h2>
+  <h4 class="mt-4 btn btn-warning">Total Cars Found: {{ cars|length }}</h4>
+  <div class="row g-4">
+    {% for car in cars %}
+    <div class="col-md-4">
+      <div class="card shadow-lg rounded overflow-hidden">
+        <img src="{{ car.image.url }}" class="card-img-top" alt="{{ car.name }}" style="height: 250px; object-fit: cover;">
+        <div class="card-body">
+          <h5 class="card-title text-truncate" style="color: #333 ;font-size: 30px;">{{ car.name }}</h5>
+          <p class="card-text car-description">{{ car.description |truncatewords:20}}</p>
+          <p class="card-text"><strong>Brand:</strong> {{ car.brand }}</p>
+          <h4 class="card-text text-success">Price: BDT{{ car.price }}</h4>
+          <p class="card-text"><strong>Available Quantity:</strong> {{ car.quantity }}</p>
+          <a href="{% url 'car_details' car.id %}" class="btn btn-outline-primary rounded-pill">View Details</a>
+        </div>
+       
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+{% endblock %}
+
+{% block extra_css %}
+<style>
+  .car-description {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-height: 4.5em; /* Adjust based on line height */
+    transition: max-height 0.3s ease;
+  }
+  .card {
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  }
+</style>
+{% endblock %}
+

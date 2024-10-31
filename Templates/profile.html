@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">My Profile</h2>
+
+    <a href="{% url 'edit_profile'%}" class="btn btn-info">Change Your Profile Details</a>
+    <br>
+    <h4 class="mt-4">Purchased Cars</h4>
+    
+    {% if orders %}
+    <div class="d-flex flex-wrap justify-content-center gap-4">
+        {% for order in orders %}
+        <div class="card text-center shadow-lg border-0" style="width: 18rem;">
+            <img src="{{order.car.image.url}}" class="card-img-top" alt="Car image" style="height: 200px; object-fit: cover;">
+            <div class="card-body">
+                <h5 class="card-title text-primary">{{order.car.name}}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">{{order.car.description | truncatewords:30}}</h6>
+                <p class="card-text font-weight-bold">BDT: <span class="text-success">{{order.car.price}}</span></p>
+                <p class="card-text"><small class="text-muted">Order Date: {{order.order_date}}</small></p>
+                <p class="card-text"><small class="text-muted">Brand: {{order.car.brand}}</small></p>
+            </div>
+        </div>        
+        {% endfor %}
+    </div>
+       
+    
+    {% else %}
+    <h2>You haven't purchased any cars yet.</h2>
+    {% endif %}
+</div>
+{% endblock %}
